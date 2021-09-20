@@ -4,6 +4,7 @@ let cors = require("cors");
 let bodyParser = require('body-parser');
 
 let app = express();
+let PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -63,10 +64,10 @@ app.post('/user', (req, res) => {
   );
 })
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   db.connect(function(err){
     if (err) throw err;
     console.log("Connected");
   })
-  console.log("Working in port 3001");
+  console.log("Working in port ${PORT}");
 });
