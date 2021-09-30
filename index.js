@@ -25,10 +25,12 @@ let db = mysql.createPool({
 });
 
 app.get('/', (req, res) => {
-  res.send("Hello world!", 200);
+  console.log("Sending a 'Hello world!' to " + req.ip);
+  res.status(200).send("Hello world!");
 });
 
 app.get('/users', (req, res) => {
+  console.log("Sending all the users to " + req.ip);
   db.query(
     "SELECT * FROM user",
     (err, result) => {
@@ -36,7 +38,6 @@ app.get('/users', (req, res) => {
         console.log(err);
       }
       else if(result.length > 0) {
-        console.log(result);
         res.send(result);
       }
       else{
@@ -48,21 +49,28 @@ app.get('/users', (req, res) => {
 
 app.post('/user', (req, res) => {
 
+  console.log("Register user request from " + req.ip);
+
   let username = req.body.username;
   let password = req.body.password;
   let role = req.body.role;
 
-  db.query(
-    "INSERT INTO user (name, hashedPassword, role) VALUES (?, ?, ?)", [username, password, role],
-    (err, result) => {
-      if(err){
-        console.log(err);
+  if (username && password && role){
+    db.query(
+      "INSERT INTO user (name, hashedPassword, role) VALUES (?, ?, ?)", [username, password, role],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.send("User " + username + " registered successfully");
+        }
       }
-      else {
-        res.send("Usuario registrado exitosamente");
-      }
-    }
-  );
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+  }
 })
 
 app.listen(PORT, () => {
