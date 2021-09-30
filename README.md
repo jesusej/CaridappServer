@@ -18,10 +18,15 @@ Server implementation for Caridapp project with Express and node.js
 3. Add a commit with starting a `:heavy_plus_sign:` emoji
 4. If you messed up or if you want to uninstall a dependencie, use `npm uninstall <package-name>`
 
+## Remember...
+
+- If you want to modify the DB for yourself you need to use a tool to connect to the DB. ClearDB recommends to use Graphical Tools like [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+- Only push/merge to main if you think that your implementation is ready enough. Remember to work with branches meanwhile
 
 ## Useful info/resources
 
 - [Postman API tester](https://www.postman.com)
+- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
 - [MySQL library docs](https://www.npmjs.com/package/mysql#server-disconnects)
 - [Express docs](http://expressjs.com/en/4x/api.html)
 - [Gitmoji](https://gitmoji.dev)
