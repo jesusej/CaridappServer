@@ -16,7 +16,8 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let db = mysql.createConnection({
+let db = mysql.createPool({
+  connectionLimit: 5,
   host: process.env.DB_URL,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
@@ -65,9 +66,5 @@ app.post('/user', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  db.connect(function(err){
-    if (err) throw err;
-    console.log("Connected");
-  })
-  console.log("Working in port ${PORT}");
+  console.log("Working in port " + PORT);
 });
