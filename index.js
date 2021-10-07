@@ -57,7 +57,7 @@ app.post('/user', (req, res) => {
 
   if (username && password && (role || role === 0)){
     db.query(
-      "INSERT INTO user (name, hashedPassword, role) VALUES (?, ?, ?)", [username, password, role],
+      "INSERT INTO user (name, hashedPwd, role) VALUES (?, ?, ?)", [username, password, role],
       (err, result) => {
         if(err){
           console.log(err);
