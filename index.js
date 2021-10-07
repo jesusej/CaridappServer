@@ -73,6 +73,9 @@ app.post('/user', (req, res) => {
   }
 })
 
+app.post('/import', (req, res) => {
+})
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
