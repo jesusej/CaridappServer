@@ -102,10 +102,10 @@ app.post('/import', (req, res) => {
     */
 })
 
-/*app.get('/import', (req, res) => {
-  let nameP = req.body.name;
-  console.log(nameP);
-  res.status(200).send(nameP);
+app.get('/import', (req, res) => {
+  res.status(200);
+  console.log(req.body);      // your JSON
+  res.send(req.body);
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
@@ -118,9 +118,9 @@ app.post('/import', (req, res) => {
           res.send("User " + nameP + " registered successfully");
         }
       }
-    );
+    );*/
     
-})*/
+})
 
 app.get('/history', (req, res) => {
   db.query(
