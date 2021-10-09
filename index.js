@@ -75,13 +75,10 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/import', (req, res) => {
-  //let nameP = req.body.name;
-  //console.log(nameP);
-  //res.status(200).send(nameP);
-
-  //res.status(200).send(req.body);
+  
   res.status(200);
-  res.json({requestBody: req.body});
+  console.log(req.body);      // your JSON
+  res.send(req.body);
 
   /*var body = req.body;
   var accessHeader = req.headers;
