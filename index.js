@@ -74,21 +74,21 @@ app.post('/user', (req, res) => {
   }
 })
 
-app.post('/import', function(request, response) {
+app.post('/import', (req, res) => {
   //let nameP = req.body.name;
   //console.log(nameP);
   //res.status(200).send(nameP);
 
   //res.status(200).send(req.body);
-  response.status(200);
-  response.send(request.body);
+  res.status(200);
+  res.json({requestBody: req.body});
 
-  var body = req.body;
+  /*var body = req.body;
   var accessHeader = req.headers;
 
   var product = new Product({
     name: body.name
-  })
+  })*/
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
