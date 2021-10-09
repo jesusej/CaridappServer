@@ -73,6 +73,15 @@ app.post('/user', (req, res) => {
   }
 })
 
+app.post('/setDonation', (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+  /*db.query("INSERT INTO donation (shopID) VALUES (?)", [shopID],
+  (err, result) => {
+    //Functions
+  });*/
+});
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
