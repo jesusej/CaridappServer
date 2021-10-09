@@ -2,6 +2,7 @@ let express = require("express");
 let mysql = require("mysql");
 let cors = require("cors");
 let bodyParser = require('body-parser');
+const { response } = require("express");
 
 let app = express();
 let PORT = process.env.PORT || 3001;
@@ -74,9 +75,17 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/import', (req, res) => {
-  let nameP = req.body.name;
-  console.log(nameP);
+  //let nameP = req.body.name;
+  //console.log(nameP);
   res.status(200).send(nameP);
+  res.send(req.body);
+
+  var body = req.body;
+  var accessHeader = req.headers;
+
+  var product = new Product({
+    name: body.name
+  })
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
