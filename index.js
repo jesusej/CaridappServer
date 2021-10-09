@@ -75,11 +75,33 @@ app.post('/user', (req, res) => {
 
 app.post('/setDonation', (req, res) => {
   console.log(req.body);
-  res.send(req.body);
+  
+  var productArray = [];
+  for(let product of req.body.productArray){
+    productArray.push({
+      expirationDate: new Date(product.expirationDate) || null,
+      quantity: product.quantity || null,
+      itemName: product.itemName || null,
+      description: product.description || null,
+      unitaryCost: product.unitaryCost || null,
+      unitaryWeight: product.unitaryWeight || null,
+      originalQuantity: product.originalQuantity || null
+    });
+  }
+
+  let donation = {
+    status: (typeof req.body.status != "undefined" ? req.body.status : null),
+    receptionDate: new Date(req.body.receptionDate) || null,
+    pickUpDate: new Date(req.body.pickUpDate) || null,
+    warehouse: req.body.warehouse || null,
+    productArray: productArray
+  }
+
   /*db.query("INSERT INTO donation (shopID) VALUES (?)", [shopID],
   (err, result) => {
     //Functions
   });*/
+  res.send(donation);
 });
 
 app.listen(PORT, () => {
