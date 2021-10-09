@@ -76,7 +76,27 @@ app.post('/user', (req, res) => {
 app.post('/import', (req, res) => {
   let nameP = req.body.name;
   console.log(nameP);
-  res.status(201).send(nameP);
+  res.status(200).send(nameP);
+
+    /*db.query(
+      "INSERT INTO product (itemName) VALUES (?)", [nameP],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.send("User " + nameP + " registered successfully");
+        }
+      }
+    );
+    */
+})
+
+app.get('/import', (req, res) => {
+  let nameP = req.body.name;
+  console.log(nameP);
+  res.status(200).send(nameP);
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
