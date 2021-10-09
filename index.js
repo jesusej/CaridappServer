@@ -76,7 +76,7 @@ app.post('/user', (req, res) => {
 app.post('/import', (req, res) => {
   let nameP = req.body.name;
   console.log(nameP);
-  res.status(200).send(nameP);
+  res.status(201).send(nameP);
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
