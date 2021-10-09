@@ -74,6 +74,38 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/import', (req, res) => {
+  let nameP = req.body.name;
+
+    /*db.query(
+      "INSERT INTO product (itemName) VALUES (?)", [nameP],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.send("User " + nameP + " registered successfully");
+        }
+      }
+    );
+    */
+})
+
+app.get('/history', (req, res) => {
+  db.query(
+    "SELECT * FROM product",
+    (err, result) => {
+      if(err){
+        console.log(err);
+      }
+      else if(result.length > 0) {
+        res.send(result);
+      }
+      else{
+        res.send("There's no products in db");
+      }
+    }
+  );
 })
 
 app.listen(PORT, () => {
