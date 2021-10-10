@@ -74,33 +74,46 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/setDonation', (req, res) => {
-  console.log(req.body);
-  
   var productArray = [];
   for(let product of req.body.productArray){
     productArray.push({
-      expirationDate: new Date(product.expirationDate) || null,
+      expirationDate: product.expirationDate || null,
       quantity: product.quantity || null,
-      itemName: product.itemName || null,
-      description: product.description || null,
       unitaryCost: product.unitaryCost || null,
-      unitaryWeight: product.unitaryWeight || null,
       originalQuantity: product.originalQuantity || null
     });
   }
 
   let donation = {
     status: (typeof req.body.status != "undefined" ? req.body.status : null),
-    receptionDate: new Date(req.body.receptionDate) || null,
-    pickUpDate: new Date(req.body.pickUpDate) || null,
+    receptionDate: req.body.receptionDate || null,
+    pickUpDate: req.body.pickUpDate || null,
     warehouse: req.body.warehouse || null,
     productArray: productArray
   }
 
-  /*db.query("INSERT INTO donation (shopID) VALUES (?)", [shopID],
+  db.query("INSERT INTO donation (status, receptionDate, pickUpDate, warehouse) VALUES (?, ?, ?, ?)", [donation.status, donation.receptionDate, donation.pickUpDate, donation.warehouse],
   (err, result) => {
-    //Functions
-  });*/
+    if (err){
+      console.log(err);
+      res.send(err);
+    } else {
+      console.log("Donation registered at id " + result.insertId);
+      
+      let donationID = result.insertId;
+      
+      for(let product of productArray){
+        db.query("INSERT INTO line (donationID, unitaryCost, productExpiration, originalQuantity, quantity) VALUES (?, ?, ?, ?, ?)",
+        [donationID, product.unitaryCost, product.expirationDate, product.originalQuantity, product.quantity],
+        (error) => {
+          if(error){
+            console.log("Error in product " + product.itemName);
+            console.log(error)
+          }
+        })
+      }
+    }
+  });
   res.send(donation);
 });
 
