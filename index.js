@@ -74,14 +74,14 @@ app.post('/user', (req, res) => {
 })
 
 app.post('/setDonation', (req, res) => {
-  var productArray = [];
-  for(let product of req.body.productArray){
-    productArray.push({
-      upc: product.upc,
-      expirationDate: product.expirationDate || null,
-      quantity: product.quantity || null,
-      unitaryCost: product.unitaryCost || null,
-      originalQuantity: product.originalQuantity || null
+  var lineArray = [];
+  for(let line of req.body.lineArray){
+    lineArray.push({
+      upc: line.upc,
+      expirationDate: line.expirationDate || null,
+      quantity: line.quantity || null,
+      unitaryCost: line.unitaryCost || null,
+      originalQuantity: line.originalQuantity || null
     });
   }
 
@@ -90,7 +90,7 @@ app.post('/setDonation', (req, res) => {
     receptionDate: req.body.receptionDate || null,
     pickUpDate: req.body.pickUpDate || null,
     warehouse: req.body.warehouse || null,
-    productArray: productArray
+    lineArray: lineArray
   }
 
   db.query("INSERT INTO donation (status, receptionDate, pickUpDate, warehouse) VALUES (?, ?, ?, ?)", [donation.status, donation.receptionDate, donation.pickUpDate, donation.warehouse],
@@ -103,12 +103,12 @@ app.post('/setDonation', (req, res) => {
       
       let donationID = result.insertId;
       
-      for(let product of productArray){
+      for(let line of lineArray){
         db.query("INSERT INTO line (upc, donationID, unitaryCost, productExpiration, originalQuantity, quantity) VALUES (?, ?, ?, ?, ?, ?)",
-        [product.upc, donationID, product.unitaryCost, product.expirationDate, product.originalQuantity, product.quantity],
+        [line.upc, donationID, line.unitaryCost, line.expirationDate, line.originalQuantity, line.quantity],
         (error) => {
           if(error){
-            console.log("Error in product " + product.upc);
+            console.log("Error in line " + line.upc);
             console.log(error)
           }
         })
