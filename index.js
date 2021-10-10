@@ -73,6 +73,51 @@ app.post('/user', (req, res) => {
   }
 })
 
+app.post('/setDonation', (req, res) => {
+  var lineArray = [];
+  for(let line of req.body.lineArray){
+    lineArray.push({
+      upc: line.upc,
+      expirationDate: line.expirationDate || null,
+      quantity: line.quantity || null,
+      unitaryCost: line.unitaryCost || null,
+      originalQuantity: line.originalQuantity || null
+    });
+  }
+
+  let donation = {
+    status: (typeof req.body.status != "undefined" ? req.body.status : null),
+    receptionDate: req.body.receptionDate || null,
+    pickUpDate: req.body.pickUpDate || null,
+    warehouse: req.body.warehouse || null,
+    lineArray: lineArray
+  }
+
+  db.query("INSERT INTO donation (status, receptionDate, pickUpDate, warehouse) VALUES (?, ?, ?, ?)", [donation.status, donation.receptionDate, donation.pickUpDate, donation.warehouse],
+  (err, result) => {
+    if (err){
+      console.log(err);
+      res.send(err);
+    } else {
+      console.log("Donation registered at id " + result.insertId);
+      
+      let donationID = result.insertId;
+      
+      for(let line of lineArray){
+        db.query("INSERT INTO line (upc, donationID, unitaryCost, productExpiration, originalQuantity, quantity) VALUES (?, ?, ?, ?, ?, ?)",
+        [line.upc, donationID, line.unitaryCost, line.expirationDate, line.originalQuantity, line.quantity],
+        (error) => {
+          if(error){
+            console.log("Error in line " + line.upc);
+            console.log(error)
+          }
+        })
+      }
+    }
+  });
+  res.send(donation);
+});
+
 app.post('/import', (req, res) => {
   let nameP = req.body.name;
 
@@ -107,6 +152,7 @@ app.get('/history', (req, res) => {
     }
   );
 })
+
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
