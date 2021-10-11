@@ -99,7 +99,7 @@ app.post('/import', (req, res) => {
           
         }
         else {
-          res.send("Product " + productName + " registered successfully");
+          //res.send("Product " + productName + " registered successfully");
           res.status(200);
           res.send(req.body);
         }
