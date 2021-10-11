@@ -76,14 +76,14 @@ app.post('/user', (req, res) => {
 
 app.post('/import', (req, res) => {
   
-  
+  /*
   res.status(200);
   console.log(req.body);      // your JSON
   res.send(req.body);
-  
+  */
 
   //console.log("Register product request from " + req.ip);
-  /*
+  
   let productName = req.body.name;
   let descri = req.body.desc;
   let productUPC = req.body.upc;
@@ -95,17 +95,19 @@ app.post('/import', (req, res) => {
         if(err){
           console.log(err);
           res.send(err);
-          res.status(200);
+          
         }
         else {
           res.send("Product " + productName + " registered successfully");
+          res.status(200);
+          res.send(req.body);
         }
       }
     );
   } else {
     res.send("At least one of the variables was missing");
   }
-  */
+  
 })
 
 app.get('/import', (req, res) => {
