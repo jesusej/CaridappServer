@@ -197,7 +197,7 @@ app.get('/history', (req, res) => {
             //res.send(prettyResult);
           }
           else{
-            res.send("There's no users in db");
+            res.send("There's no registered products in db");
           }
         }
       );
