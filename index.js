@@ -2,6 +2,7 @@ let express = require("express");
 let mysql = require("mysql");
 let cors = require("cors");
 let bodyParser = require('body-parser');
+const { response } = require("express");
 
 let app = express();
 let PORT = process.env.PORT || 3001;
@@ -119,7 +120,17 @@ app.post('/setDonation', (req, res) => {
 });
 
 app.post('/import', (req, res) => {
-  let nameP = req.body.name;
+  
+  res.status(200);
+  console.log(req.body);      // your JSON
+  res.send(req.body);
+
+  /*var body = req.body;
+  var accessHeader = req.headers;
+
+  var product = new Product({
+    name: body.name
+  })*/
 
     /*db.query(
       "INSERT INTO product (itemName) VALUES (?)", [nameP],
@@ -136,8 +147,32 @@ app.post('/import', (req, res) => {
     */
 })
 
+app.get('/import', (req, res) => {
+  res.status(200);
+  console.log(req.body);      // your JSON
+  res.send(req.body);
+
+    /*db.query(
+      "INSERT INTO product (itemName) VALUES (?)", [nameP],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.send("User " + nameP + " registered successfully");
+        }
+      }
+    );*/
+    
+})
+
 app.get('/history', (req, res) => {
-  db.query(
+  
+  //res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
+  res.json({name:'test2', desc:'2.0'});
+  res.status(200);
+  /*db.query(
     "SELECT * FROM product",
     (err, result) => {
       if(err){
@@ -151,6 +186,7 @@ app.get('/history', (req, res) => {
       }
     }
   );
+  */
 })
 
 
