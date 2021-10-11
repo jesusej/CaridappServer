@@ -123,7 +123,10 @@ app.get('/import', (req, res) => {
 })
 
 app.get('/history', (req, res) => {
-  db.query(
+  
+  res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
+  res.status(200);
+  /*db.query(
     "SELECT * FROM product",
     (err, result) => {
       if(err){
@@ -137,6 +140,7 @@ app.get('/history', (req, res) => {
       }
     }
   );
+  */
 })
 
 app.listen(PORT, () => {
