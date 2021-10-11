@@ -180,23 +180,29 @@ app.get('/import', (req, res) => {
 app.get('/history', (req, res) => {
   
   //res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
+  /*
   res.json({name:'test2', desc:'2.0'});
   res.status(200);
-  /*db.query(
-    "SELECT * FROM product",
-    (err, result) => {
-      if(err){
-        console.log(err);
-      }
-      else if(result.length > 0) {
-        res.send(result);
-      }
-      else{
-        res.send("There's no products in db");
-      }
-    }
-  );
   */
+    db.query(
+        "SELECT * FROM product",
+        (err, result) => {
+          if(err){
+            console.log(err);
+          }
+          else if(result.length > 0) {
+            res.send(result);
+            //let json = JSON.parse(result);
+            //let prettyResult = JSON.stringify(result, null, 20);
+            //res.send(prettyResult);
+          }
+          else{
+            res.send("There's no users in db");
+          }
+        }
+      );
+
+  
 })
 
 
