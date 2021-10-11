@@ -81,7 +81,7 @@ app.post('/import', (req, res) => {
   let productUPC = req.body.upc;
   let prodWeight = req.body.weight;
 
-  if (productName && descri && (productUPC || productUPC === 0)){
+  if (productName && descri && prodWeight && (productUPC || productUPC === 0)){
     db.query(
       "INSERT INTO product (itemName, description, upc, unitaryWeight) VALUES (?, ?, ?, ?)", [productName, descri, productUPC, prodWeight],
       (err, result) => {
