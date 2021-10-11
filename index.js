@@ -118,6 +118,26 @@ app.post('/setDonation', (req, res) => {
   res.send(donation);
 });
 
+app.get('/getTopProducts', (req, res) => {
+
+  db.query(
+      "SELECT upc, itemName, description, unitaryWeight FROM product",
+      (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else if(result.length > 0) {
+          res.send(result);
+        }
+        else{
+          res.send("There's no registered products in db");
+        }
+      }
+    );
+
+
+})
+
 app.post('/import', (req, res) => {
   let nameP = req.body.name;
 
