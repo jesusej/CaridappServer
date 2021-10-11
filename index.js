@@ -76,15 +76,6 @@ app.post('/user', (req, res) => {
 
 app.post('/import', (req, res) => {
   
-  /*
-  res.status(200);
-  console.log(req.body);      // your JSON
-  res.send(req.body);
-  */
-
-  //console.log("Register product request from " + req.ip);
-  //res.status(200);
-  //res.send(req.body);
   let productName = req.body.name;
   let descri = req.body.desc;
   let productUPC = req.body.upc;
@@ -99,7 +90,6 @@ app.post('/import', (req, res) => {
           
         }
         else {
-          //res.send("Product " + productName + " registered successfully");
           res.status(200);
           res.send(req.body);
         }
@@ -112,33 +102,8 @@ app.post('/import', (req, res) => {
   
 })
 
-app.get('/import', (req, res) => {
-  res.status(200);
-  console.log(req.body);      // your JSON
-  res.send(req.body);
-
-    /*db.query(
-      "INSERT INTO product (itemName) VALUES (?)", [nameP],
-      (err, result) => {
-        if(err){
-          console.log(err);
-          res.send(err);
-        }
-        else {
-          res.send("User " + nameP + " registered successfully");
-        }
-      }
-    );*/
-    
-})
-
 app.get('/history', (req, res) => {
-  
-  //res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
-  /*
-  res.json({name:'test2', desc:'2.0'});
-  res.status(200);
-  */
+
     db.query(
         "SELECT * FROM product",
         (err, result) => {
@@ -147,9 +112,6 @@ app.get('/history', (req, res) => {
           }
           else if(result.length > 0) {
             res.send(result);
-            //let json = JSON.parse(result);
-            //let prettyResult = JSON.stringify(result, null, 20);
-            //res.send(prettyResult);
           }
           else{
             res.send("There's no registered products in db");
