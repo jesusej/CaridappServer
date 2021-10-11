@@ -84,6 +84,7 @@ app.post('/import', (req, res) => {
 
   //console.log("Register product request from " + req.ip);
   res.status(200);
+  res.send(req.body);
   /*let productName = req.body.name;
   let descri = req.body.desc;
   let productUPC = req.body.upc;
