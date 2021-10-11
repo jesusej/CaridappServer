@@ -2,7 +2,7 @@ let express = require("express");
 let mysql = require("mysql");
 let cors = require("cors");
 let bodyParser = require('body-parser');
-const { response } = require("express");
+
 
 let app = express();
 let PORT = process.env.PORT || 3001;
@@ -121,30 +121,38 @@ app.post('/setDonation', (req, res) => {
 
 app.post('/import', (req, res) => {
   
+  /*
   res.status(200);
   console.log(req.body);      // your JSON
   res.send(req.body);
+  */
 
-  /*var body = req.body;
-  var accessHeader = req.headers;
+  //console.log("Register product request from " + req.ip);
+  
+  let productName = req.body.name;
+  let descri = req.body.desc;
+  let productUPC = req.body.upc;
 
-  var product = new Product({
-    name: body.name
-  })*/
-
-    /*db.query(
-      "INSERT INTO product (itemName) VALUES (?)", [nameP],
+  if (productName && descri && (productUPC || productUPC === 0)){
+    db.query(
+      "INSERT INTO product (itemName, description, upc) VALUES (?, ?, ?)", [productName, descri, productUPC],
       (err, result) => {
         if(err){
           console.log(err);
           res.send(err);
+          
         }
         else {
-          res.send("User " + nameP + " registered successfully");
+          res.send("Product " + productName + " registered successfully");
+          res.status(200);
+          res.send(req.body);
         }
       }
     );
-    */
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
 })
 
 app.get('/import', (req, res) => {
