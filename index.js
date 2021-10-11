@@ -83,8 +83,8 @@ app.post('/import', (req, res) => {
   */
 
   //console.log("Register product request from " + req.ip);
-  
-  let productName = req.body.name;
+  res.status(200);
+  /*let productName = req.body.name;
   let descri = req.body.desc;
   let productUPC = req.body.upc;
 
@@ -107,6 +107,7 @@ app.post('/import', (req, res) => {
   } else {
     res.send("At least one of the variables was missing");
   }
+  */
   
 })
 
