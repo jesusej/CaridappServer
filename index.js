@@ -124,7 +124,8 @@ app.get('/import', (req, res) => {
 
 app.get('/history', (req, res) => {
   
-  res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
+  //res.json([{name:'test', desc:'1.0'}, {name:'test2', desc:'2.0'}]);
+  res.json({name:'test2', desc:'2.0'});
   res.status(200);
   /*db.query(
     "SELECT * FROM product",
