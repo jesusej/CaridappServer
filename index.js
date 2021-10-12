@@ -3,6 +3,7 @@ let mysql = require("mysql");
 let cors = require("cors");
 let bodyParser = require('body-parser');
 
+
 let app = express();
 let PORT = process.env.PORT || 3001;
 
@@ -139,38 +140,52 @@ app.get('/getTopProducts', (req, res) => {
 })
 
 app.post('/import', (req, res) => {
-  let nameP = req.body.name;
+  
+  let productName = req.body.name;
+  let descri = req.body.desc;
+  let productUPC = req.body.upc;
+  let prodWeight = req.body.weight;
 
-    /*db.query(
-      "INSERT INTO product (itemName) VALUES (?)", [nameP],
+  if (productName && descri && prodWeight && (productUPC || productUPC === 0)){
+    db.query(
+      "INSERT INTO product (itemName, description, upc, unitaryWeight) VALUES (?, ?, ?, ?)", [productName, descri, productUPC, prodWeight],
       (err, result) => {
         if(err){
           console.log(err);
           res.send(err);
+          
         }
         else {
-          res.send("User " + nameP + " registered successfully");
+          res.status(200);
+          res.send(req.body);
         }
       }
     );
-    */
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
+  
 })
 
 app.get('/history', (req, res) => {
-  db.query(
-    "SELECT * FROM product",
-    (err, result) => {
-      if(err){
-        console.log(err);
-      }
-      else if(result.length > 0) {
-        res.send(result);
-      }
-      else{
-        res.send("There's no products in db");
-      }
-    }
-  );
+
+    db.query(
+        "SELECT * FROM product",
+        (err, result) => {
+          if(err){
+            console.log(err);
+          }
+          else if(result.length > 0) {
+            res.send(result);
+          }
+          else{
+            res.send("There's no registered products in db");
+          }
+        }
+      );
+
+  
 })
 
 
