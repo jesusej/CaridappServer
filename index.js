@@ -76,10 +76,10 @@ app.post('/user', (req, res) => {
 
 app.post('/import', (req, res) => {
   
-  let productName = req.body.name;
-  let descri = req.body.desc;
   let productUPC = req.body.upc;
-  let prodWeight = req.body.weight;
+  let productName = req.body.itemName;
+  let descri = req.body.description;
+  let prodWeight = req.body.unitaryWeight;
 
   if (productName && descri && prodWeight && (productUPC || productUPC === 0)){
     db.query(
