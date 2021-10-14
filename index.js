@@ -119,15 +119,36 @@ app.post('/setDonation', (req, res) => {
   res.send(donation);
 });
 
+app.get('/getTopProducts', (req, res) => {
+
+  db.query(
+      "SELECT upc, itemName, description, unitaryWeight FROM product",
+      (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else if(result.length > 0) {
+          res.send(result);
+        }
+        else{
+          res.send("There's no registered products in db");
+        }
+      }
+    );
+
+
+})
+
 app.post('/import', (req, res) => {
   
-  let productName = req.body.name;
-  let descri = req.body.desc;
   let productUPC = req.body.upc;
+  let productName = req.body.itemName;
+  let descri = req.body.description;
+  let prodWeight = req.body.unitaryWeight;
 
-  if (productName && descri && (productUPC || productUPC === 0)){
+  if (productName && descri && prodWeight && (productUPC || productUPC === 0)){
     db.query(
-      "INSERT INTO product (itemName, description, upc) VALUES (?, ?, ?)", [productName, descri, productUPC],
+      "INSERT INTO product (itemName, description, upc, unitaryWeight) VALUES (?, ?, ?, ?)", [productName, descri, productUPC, prodWeight],
       (err, result) => {
         if(err){
           console.log(err);
