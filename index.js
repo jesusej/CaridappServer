@@ -184,8 +184,24 @@ app.get('/history', (req, res) => {
           }
         }
       );
+})
 
-  
+app.get('/historyLine', (req, res) => {
+
+    db.query(
+        "SELECT * FROM line",
+        (err, result) => {
+          if(err){
+            console.log(err);
+          }
+          else if(result.length > 0) {
+            res.send(result);
+          }
+          else{
+            res.send("There's no registered products in db");
+          }
+        }
+      );
 })
 
 
