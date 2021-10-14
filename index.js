@@ -124,7 +124,7 @@ app.get('/history', (req, res) => {
 app.get('/historyLine', (req, res) => {
 
     db.query(
-        "SELECT * FROM line",
+        "SELECT line.lineID, product.itemName, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity, line.quantity FROM line INNER JOIN product ON line.upc=product.upc",
         (err, result) => {
           if(err){
             console.log(err);
