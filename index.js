@@ -139,6 +139,34 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
+app.post('/setDonator', (req, res) => {
+    
+  let nameDonator = req.body.name;
+  let adressPhysic = req.body.addressF;
+  let adressRfc = req.body.addressR;
+  let rfcDonator = req.body.rfc;
+  let phoneDonator = req.body.phone;
+  let emailDonator = req.body.email;
+
+  
+    db.query(
+      "INSERT INTO product (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+
+}
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
