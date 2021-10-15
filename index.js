@@ -204,6 +204,25 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
+app.get('/VerifyLine', (req, res) => {
+
+    db.query(
+        "SELECT line.lineID, product.itemName, line.donationID, line.quantity, line.productExpiration FROM line INNER JOIN product ON line.upc=product.upc",
+        (err, result) => {
+          if(err){
+            console.log(err);
+          }
+          else if(result.length > 0) {
+            res.send(result);
+          }
+          else{
+            res.send("There's no registered products in db");
+          }
+        }
+      );
+})
+
+
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
