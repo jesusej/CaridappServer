@@ -74,71 +74,6 @@ app.post('/user', (req, res) => {
   }
 })
 
-app.post('/setDonation', (req, res) => {
-  var lineArray = [];
-  for(let line of req.body.lineArray){
-    lineArray.push({
-      upc: line.upc,
-      expirationDate: line.expirationDate || null,
-      quantity: line.quantity || null,
-      unitaryCost: line.unitaryCost || null,
-      originalQuantity: line.originalQuantity || null
-    });
-  }
-
-  let donation = {
-    status: (typeof req.body.status != "undefined" ? req.body.status : null),
-    receptionDate: req.body.receptionDate || null,
-    pickUpDate: req.body.pickUpDate || null,
-    warehouse: req.body.warehouse || null,
-    lineArray: lineArray
-  }
-
-  db.query("INSERT INTO donation (status, receptionDate, pickUpDate, warehouse) VALUES (?, ?, ?, ?)", [donation.status, donation.receptionDate, donation.pickUpDate, donation.warehouse],
-  (err, result) => {
-    if (err){
-      console.log(err);
-      res.send(err);
-    } else {
-      console.log("Donation registered at id " + result.insertId);
-      
-      let donationID = result.insertId;
-      
-      for(let line of lineArray){
-        db.query("INSERT INTO line (upc, donationID, unitaryCost, productExpiration, originalQuantity, quantity) VALUES (?, ?, ?, ?, ?, ?)",
-        [line.upc, donationID, line.unitaryCost, line.expirationDate, line.originalQuantity, line.quantity],
-        (error) => {
-          if(error){
-            console.log("Error in line " + line.upc);
-            console.log(error)
-          }
-        })
-      }
-    }
-  });
-  res.send(donation);
-});
-
-app.get('/getTopProducts', (req, res) => {
-
-  db.query(
-      "SELECT upc, itemName, description, unitaryWeight FROM product",
-      (err, result) => {
-        if(err){
-          console.log(err);
-        }
-        else if(result.length > 0) {
-          res.send(result);
-        }
-        else{
-          res.send("There's no registered products in db");
-        }
-      }
-    );
-
-
-})
-
 app.post('/import', (req, res) => {
   
   let productUPC = req.body.upc;
@@ -204,25 +139,33 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
-app.get('/VerifyLine', (req, res) => {
+app.post('/setDonator', (req, res) => {
+    
+  let nameDonator = req.body.name;
+  let adressPhysic = req.body.addressF;
+  let adressRfc = req.body.addressR;
+  let rfcDonator = req.body.rfc;
+  let phoneDonator = req.body.phone;
+  let emailDonator = req.body.email;
 
+  
     db.query(
-        "SELECT line.lineID, product.itemName, line.donationID, line.quantity, line.productExpiration FROM line INNER JOIN product ON line.upc=product.upc",
-        (err, result) => {
-          if(err){
-            console.log(err);
-          }
-          else if(result.length > 0) {
-            res.send(result);
-          }
-          else{
-            res.send("There's no registered products in db");
-          }
+      "INSERT INTO product (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
         }
-      );
-})
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
 
-
+}
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
