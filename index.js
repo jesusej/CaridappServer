@@ -139,18 +139,21 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
-app.post('/setDonator', (req, res) => {
-    
-  let nameDonator = req.body.name;
-  let adressPhysic = req.body.addressF;
-  let adressRfc = req.body.addressR;
-  let rfcDonator = req.body.rfc;
-  let phoneDonator = req.body.phone;
-  let emailDonator = req.body.email;
 
+
+app.put('/updateLine', (req, res) => {
   
+  let Line_ID = req.body.lineID;
+  let uCost = req.body.unitaryCost;
+  //let productExpiration = req.body.productExpiration;
+  let quant = req.body.originalQuantity;
+
+  let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let data = [uCost, quant, Line_ID];
+
+  if (Line_ID && uCost && (quant || quant === 0)){
     db.query(
-      "INSERT INTO product (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      sql, data,
       (err, result) => {
         if(err){
           console.log(err);
@@ -161,11 +164,39 @@ app.post('/setDonator', (req, res) => {
           res.status(200);
           res.send(req.body);
         }
+      }
     );
   } else {
     res.send("At least one of the variables was missing");
+  }
+  
+  
+})
 
-}
+app.post('/setDonator', (req, res) => {
+    
+  let nameDonator = req.body.name;
+  let adressPhysic = req.body.addressF;
+  let adressRfc = req.body.addressR;
+  let rfcDonator = req.body.rfc;
+  let phoneDonator = req.body.phone;
+  let emailDonator = req.body.email;
+
+    db.query(
+      "INSERT INTO product (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    ); 
+})
+
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
