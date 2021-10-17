@@ -139,6 +139,35 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
+app.put('/updateLine', (req, res) => {
+  
+  let Line_ID = req.body.lineID;
+  let uCost = req.body.unitaryCost;
+  //let productExpiration = req.body.productExpiration;
+  let quant = req.body.quanity;
+
+  if (Line_ID && uCost && (quant || quant === 0)){
+    db.query(
+      "UPDATE line SET ?, ? WHERE lineID=?," [{uCost, quant, Line_ID}],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
+  
+})
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
