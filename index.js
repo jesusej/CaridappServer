@@ -146,7 +146,7 @@ app.put('/updateLine', (req, res) => {
   let Line_ID = req.body.lineID;
   let uCost = req.body.unitaryCost;
   //let productExpiration = req.body.productExpiration;
-  let quant = req.body.quanity;
+  let quant = req.body.quantity;
 
   if (Line_ID && uCost && (quant || quant === 0)){
     db.query(
