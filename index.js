@@ -150,7 +150,7 @@ app.put('/updateLine', (req, res) => {
 
   if (Line_ID && uCost && (quant || quant === 0)){
     db.query(
-      "UPDATE line SET ?, ? WHERE lineID=?," [{uCost, quant, Line_ID}],
+      "UPDATE line SET unitaryCost=?, quantity=? WHERE lineID=?," [{uCost, quant, Line_ID}],
       (err, result) => {
         if(err){
           console.log(err);
