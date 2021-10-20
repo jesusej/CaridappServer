@@ -124,7 +124,7 @@ app.get('/history', (req, res) => {
 app.get('/historyLine', (req, res) => {
 
     db.query(
-        "SELECT line.lineID, product.itemName, donation.pickUpDate, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID = line.lineID WHERE pickUpDate IS NOT NULL;",
+        "SELECT line.lineID, product.itemName, donation.pickUpDate, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID = line.donationID WHERE pickUpDate IS NOT NULL;",
         (err, result) => {
           if(err){
             console.log(err);
