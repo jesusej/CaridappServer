@@ -144,12 +144,15 @@ app.get('/historyLine', (req, res) => {
 app.put('/updateLine', (req, res) => {
   
   let Line_ID = req.body.lineID;
-  let uCost = req.body.unitaryCost;
-  //let productExpiration = req.body.productExpiration;
+  let dona_ID = req.body.donationID;
   let quant = req.body.originalQuantity;
+  let uCost = req.body.unitaryCost;
+  let prodExp = req.body.productExpiration;
+  let pickUp = req.body.pickUpDate;
 
-  let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
-  let data = [uCost, quant, Line_ID];
+  //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let sql = 'UPDATE line, donation SET line.originalQuantity = ?, line.unitaryCost = ?, line.productExpiration = ?, donation.pickUpDate = ? WHERE line.lineID = ? AND donation.donationID = ?';
+  let data = [quant, uCost, prodExp, pickUp, Line_ID, dona_ID];
 
   if (Line_ID && uCost && (quant || quant === 0)){
     db.query(
@@ -172,6 +175,7 @@ app.put('/updateLine', (req, res) => {
   
   
 })
+
 
 app.post('/setDonator', (req, res) => {
     
