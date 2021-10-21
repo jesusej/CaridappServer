@@ -122,7 +122,7 @@ app.post('/setDonation', (req, res) => {
 app.get('/getTopProducts', (req, res) => {
 
   db.query(
-      "SELECT upc, itemName, description, unitaryWeight FROM product",
+      "SELECT upc, itemName, description, unitaryWeight FROM product LIMIT 5",
       (err, result) => {
         if(err){
           console.log(err);
