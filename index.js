@@ -266,6 +266,38 @@ app.post('/setDonator', (req, res) => {
     ); 
 })
 
+app.put('/verifyLine', (req, res) => {
+  
+  let Line_ID = req.body.lineID;
+  let dona_ID = req.body.donationID;
+  let quant_rec = req.body.quantity;
+  let prodExp = req.body.productExpiration;
+
+  //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let sql = 'UPDATE line, donation SET line.quantity = ?, line.productExpiration = ? WHERE line.lineID = ? AND donation.donationID = ?';
+  let data = [quant_rec, prodExp, Line_ID, dona_ID];
+
+  if (Line_ID && dona_ID){
+    db.query(
+      sql, data,
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
+  
+})
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
