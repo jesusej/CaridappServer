@@ -74,6 +74,71 @@ app.post('/user', (req, res) => {
   }
 })
 
+app.post('/setDonation', (req, res) => {
+  var lineArray = [];
+  for(let line of req.body.lineArray){
+    lineArray.push({
+      upc: line.upc,
+      expirationDate: line.expirationDate,
+      quantity: line.quantity,
+      unitaryCost: line.unitaryCost,
+      originalQuantity: line.originalQuantity
+    });
+  }
+
+  let donation = {
+    status: (typeof req.body.status != "undefined" ? req.body.status : null),
+    receptionDate: req.body.receptionDate || null,
+    pickUpDate: req.body.pickUpDate || null,
+    warehouse: req.body.warehouse || null,
+    lineArray: lineArray
+  }
+
+  db.query("INSERT INTO donation (status, receptionDate, pickUpDate, warehouse) VALUES (?, ?, ?, ?)", [donation.status, donation.receptionDate, donation.pickUpDate, donation.warehouse],
+  (err, result) => {
+    if (err){
+      console.log(err);
+      res.send(err);
+    } else {
+      console.log("Donation registered at id " + result.insertId);
+      
+      let donationID = result.insertId;
+      
+      for(let line of lineArray){
+        db.query("INSERT INTO line (upc, donationID, unitaryCost, productExpiration, originalQuantity, quantity) VALUES (?, ?, ?, ?, ?, ?)",
+        [line.upc, donationID, line.unitaryCost, line.expirationDate, line.originalQuantity, line.quantity],
+        (error) => {
+          if(error){
+            console.log("Error in line " + line.upc);
+            console.log(error)
+          }
+        })
+      }
+    }
+  });
+  res.send(donation);
+});
+
+app.get('/getTopProducts', (req, res) => {
+
+  db.query(
+      "SELECT upc, itemName, description, unitaryWeight FROM product LIMIT 5",
+      (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else if(result.length > 0) {
+          res.send(result);
+        }
+        else{
+          res.send("There's no registered products in db");
+        }
+      }
+    );
+
+
+})
+
 app.post('/import', (req, res) => {
   
   let productUPC = req.body.upc;
@@ -124,7 +189,7 @@ app.get('/history', (req, res) => {
 app.get('/historyLine', (req, res) => {
 
     db.query(
-        "SELECT line.lineID, product.itemName, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity, line.quantity FROM line INNER JOIN product ON line.upc=product.upc",
+        "SELECT line.lineID, product.itemName, donation.pickUpDate, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID = line.donationID WHERE pickUpDate IS NOT NULL;",
         (err, result) => {
           if(err){
             console.log(err);
@@ -139,18 +204,24 @@ app.get('/historyLine', (req, res) => {
       );
 })
 
-app.post('/setDonator', (req, res) => {
-    
-  let nameDonator = req.body.name;
-  let adressPhysic = req.body.addressF;
-  let adressRfc = req.body.addressR;
-  let rfcDonator = req.body.rfc;
-  let phoneDonator = req.body.phone;
-  let emailDonator = req.body.email;
 
+
+app.put('/updateLine', (req, res) => {
   
+  let Line_ID = req.body.lineID;
+  let dona_ID = req.body.donationID;
+  let quant = req.body.originalQuantity;
+  let uCost = req.body.unitaryCost;
+  let prodExp = req.body.productExpiration;
+  let pickUp = req.body.pickUpDate;
+
+  //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let sql = 'UPDATE line, donation SET line.originalQuantity = ?, line.unitaryCost = ?, line.productExpiration = ?, donation.pickUpDate = ? WHERE line.lineID = ? AND donation.donationID = ?';
+  let data = [quant, uCost, prodExp, pickUp, Line_ID, dona_ID];
+
+  if (Line_ID && uCost && (quant || quant === 0)){
     db.query(
-      "INSERT INTO shop (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      sql, data,
       (err, result) => {
         if(err){
           console.log(err);
@@ -161,11 +232,72 @@ app.post('/setDonator', (req, res) => {
           res.status(200);
           res.send(req.body);
         }
+      }
     );
   } else {
     res.send("At least one of the variables was missing");
+  }
+  
+  
+})
 
-}
+
+app.post('/setDonator', (req, res) => {
+    
+  let nameDonator = req.body.name;
+  let adressPhysic = req.body.addressF;
+  let adressRfc = req.body.addressR;
+  let rfcDonator = req.body.rfc;
+  let phoneDonator = req.body.phone;
+  let emailDonator = req.body.email;
+
+    db.query(
+      "INSERT INTO shop (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    ); 
+})
+
+app.put('/verifyLine', (req, res) => {
+  
+  let Line_ID = req.body.lineID;
+  let dona_ID = req.body.donationID;
+  let quant_rec = req.body.quantity;
+  let prodExp = req.body.productExpiration;
+
+  //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let sql = 'UPDATE line, donation SET line.quantity = ?, line.productExpiration = ? WHERE line.lineID = ? AND donation.donationID = ?';
+  let data = [quant_rec, prodExp, Line_ID, dona_ID];
+
+  if (Line_ID && dona_ID){
+    db.query(
+      sql, data,
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
+  
+})
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
