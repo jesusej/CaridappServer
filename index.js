@@ -150,7 +150,7 @@ app.post('/setDonator', (req, res) => {
 
   
     db.query(
-      "INSERT INTO product (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
+      "INSERT INTO shop (nameD, shopAddress, deliveryAddress, rfc, telephone, email) VALUES (?, ?, ?, ?, ?, ?)", [nameDonator, adressPhysic, adressRfc, rfcDonator, phoneDonator, emailDonator],
       (err, result) => {
         if(err){
           console.log(err);
