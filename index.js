@@ -78,10 +78,10 @@ app.post('/setDonation', (req, res) => {
   for(let line of req.body.lineArray){
     lineArray.push({
       upc: line.upc,
-      expirationDate: line.expirationDate || null,
-      quantity: line.quantity || null,
-      unitaryCost: line.unitaryCost || null,
-      originalQuantity: line.originalQuantity || null
+      expirationDate: line.expirationDate,
+      quantity: line.quantity,
+      unitaryCost: line.unitaryCost,
+      originalQuantity: line.originalQuantity
     });
   }
 
