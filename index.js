@@ -341,10 +341,12 @@ app.put('/verifyDonation', (req, res) => {
           res.send(req.body);
         }
       }
-    );
+    )
   } else {
     res.send("At least one of the variables was missing");
-  }
+ }
+})
+
   
 /* Routes for Driver */
 
@@ -388,4 +390,4 @@ app.put('/updateDonationStatus', (req, res) => {
 
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
-});
+})
