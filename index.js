@@ -327,7 +327,7 @@ app.put('/verifyDonation', (req, res) => {
   let sql = 'UPDATE donation SET donation.warehouse = ? WHERE donation.donationID = ?';
   let data = [warehouse, dona_ID];
 
-  if (Line_ID && dona_ID){
+  if (dona_ID){
     db.query(
       sql, data,
       (err, result) => {
