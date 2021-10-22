@@ -234,6 +234,55 @@ app.put('/verifyLine', (req, res) => {
   
 })
 
+app.get('/historyDonation', (req, res) => {
+
+  db.query(
+      "SELECT donation.donationID, donation.depotReceptorID, donation.pickUpDate, donation.warehouse FROM donation.donationID WHERE pickUpDate IS NOT NULL;",
+      (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else if(result.length > 0) {
+          res.send(result);
+        }
+        else{
+          res.send("There's no registered products in db");
+        }
+      }
+    );
+})
+
+app.put('/verifyDonation', (req, res) => {
+  
+  let dona_ID = req.body.donationID;
+  let warehouse = req.body.warehouse;
+
+  //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
+  let sql = 'UPDATE donation SET donation.warehouse = ? WHERE donation.donationID = ?';
+  let data = [warehouse, dona_ID];
+
+  if (Line_ID && dona_ID){
+    db.query(
+      sql, data,
+      (err, result) => {
+        if(err){
+          console.log(err);
+          res.send(err);
+          
+        }
+        else {
+          res.status(200);
+          res.send(req.body);
+        }
+      }
+    );
+  } else {
+    res.send("At least one of the variables was missing");
+  }
+  
+  
+})
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
