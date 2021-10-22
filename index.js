@@ -303,7 +303,7 @@ app.put('/verifyLine', (req, res) => {
 app.get('/historyDonation', (req, res) => {
 
   db.query(
-      "SELECT donation.donationID, donation.depotReceptorID, donation.pickUpDate, donation.warehouse FROM donation.donationID WHERE pickUpDate IS NOT NULL;",
+      "SELECT donation.donationID, donation.pickUpDate, donation.warehouse FROM donation WHERE pickUpDate IS NOT NULL;",
       (err, result) => {
         if(err){
           console.log(err);
