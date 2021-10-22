@@ -299,6 +299,45 @@ app.put('/verifyLine', (req, res) => {
   
 })
 
+/* Routes for Driver */
+
+app.get('/getDonations', (req, res) => {
+
+  db.query(
+    "SELECT donationID, nameD, deliveryAddress FROM donation, shop WHERE status IS NULL AND donation.shopID = shop.shopID;", (err, result) => {
+      if(err){
+        console.log(err)
+        res.send(err)
+      }
+      else if (result.length > 0) {
+        res.status(200)
+        res.send(result)
+      }
+      else {
+        res.send("Donations empty")
+      }
+    }
+  )
+})
+
+app.put('/updateDonationStatus', (req, res) => {
+
+  let idDonation = req.body.idDonation;
+
+  db.query(
+    "UPDATE donation SET status = 0 WHERE (donationID = ?)", [idDonation], (err, result) => {
+      if(err){
+        console.log(err);
+        res.send(err);
+      }
+      else{
+        res.status(200);
+        res.send("Status of donation with id " + idDonation + " updated with 0");
+      }
+    }
+  )
+})
+
 app.listen(PORT, () => {
   console.log("Working in port " + PORT);
 });
