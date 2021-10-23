@@ -322,10 +322,21 @@ app.get('/getDonations', (req, res) => {
 
 app.put('/updateDonationStatus', (req, res) => {
 
-  let idDonation = req.body.idDonation;
+  let idDonation = req.body.donationID;
+  var alreadyZero = false;
 
+  db.query("SELECT status FROM donation WHERE (donationID = ?)", [idDonation], (err, result) => {
+    if(err){
+      console.log(err);
+      res.send(err);
+    }
+    else if (result[0].status == 0) {
+      alreadyZero = true;
+    }
+  })
+  
   db.query(
-    "UPDATE donation SET status = 0 WHERE (donationID = ?)", [idDonation], (err, result) => {
+    "UPDATE donation SET status = ? WHERE (donationID = ?)", [alreadyZero ? null : 0 , idDonation], (err, result) => {
       if(err){
         console.log(err);
         res.send(err);
