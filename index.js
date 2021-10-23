@@ -382,14 +382,14 @@ app.put('/updateDonationStatus', (req, res) => {
     else if (result[0].status == 0) {
       alreadyZero = true;
     }
-  })
-  
+
   let value = alreadyZero ? null : 0
+ 
   db.query(
-    "UPDATE donation SET status = ? WHERE (donationID = ?)", [value , idDonation], (err, result) => {
-      if(err){
-        console.log(err);
-        res.send(err);
+    "UPDATE donation SET status = ? WHERE (donationID = ?)", [value , idDonation], (error) => {
+      if(error){
+        console.log(error);
+        res.send(error);
       }
       else{
         res.status(200);
@@ -397,6 +397,7 @@ app.put('/updateDonationStatus', (req, res) => {
       }
     }
   )
+  })
 
 })
 
