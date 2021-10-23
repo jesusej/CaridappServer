@@ -384,15 +384,16 @@ app.put('/updateDonationStatus', (req, res) => {
     }
   })
   
+  let value = alreadyZero ? null : 0
   db.query(
-    "UPDATE donation SET status = ? WHERE (donationID = ?)", [alreadyZero ? null : 0 , idDonation], (err, result) => {
+    "UPDATE donation SET status = ? WHERE (donationID = ?)", [value , idDonation], (err, result) => {
       if(err){
         console.log(err);
         res.send(err);
       }
       else{
         res.status(200);
-        res.send("Status of donation with id " + idDonation + " updated with 0");
+        res.send("Status of donation with id " + idDonation + " updated with " + value );
       }
     }
   )
