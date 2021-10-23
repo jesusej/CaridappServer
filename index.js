@@ -371,7 +371,7 @@ app.get('/getDonations', (req, res) => {
 
 app.put('/updateDonationStatus', (req, res) => {
 
-  let idDonation = req.body.idDonation;
+  let idDonation = req.body.donationID;
 
   db.query(
     "UPDATE donation SET status = 0 WHERE (donationID = ?)", [idDonation], (err, result) => {
