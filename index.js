@@ -267,21 +267,23 @@ app.post('/setDonator', (req, res) => {
 })
 
 app.get('/historyVerify', (req, res) => {
-  
-  db.query(
-      "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL;",
-      (err, result) => {
-        if(err){
-          console.log(err);
+  let dona_ID = req.body.donationID;
+  if (dona_ID){
+    db.query(
+        "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL;",
+        (err, result) => {
+          if(err){
+            console.log(err);
+          }
+          else if(result.length > 0) {
+            res.send(result);
+          }
+          else{
+            res.send("There's no registered products in db");
+          }
         }
-        else if(result.length > 0) {
-          res.send(result);
-        }
-        else{
-          res.send("There's no registered products in db");
-        }
+      );
       }
-    );
 })
 app.put('/verifyLine', (req, res) => {
   
@@ -318,7 +320,6 @@ app.put('/verifyLine', (req, res) => {
 
 
 app.get('/historyDonation', (req, res) => {
-
   db.query(
       "SELECT donation.donationID, donation.pickUpDate, donation.warehouse FROM donation WHERE pickUpDate IS NOT NULL;",
       (err, result) => {
