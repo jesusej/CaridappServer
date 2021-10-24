@@ -269,7 +269,7 @@ app.post('/setDonator', (req, res) => {
 app.get('/historyVerify', (req, res) => {
   
   db.query(
-      "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID = line.donationID  WHERE pickUpDate IS NOT NULL;",
+      "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE donation.donationID = line.donationID;",
       (err, result) => {
         if(err){
           console.log(err);
