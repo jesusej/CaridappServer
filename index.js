@@ -268,9 +268,11 @@ app.post('/setDonator', (req, res) => {
 
 app.get('/historyVerify', (req, res) => {
   let dona_ID = req.body.donationID;
+  let data = [dona_ID]
+  let sql = "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL;"
   if (dona_ID){
     db.query(
-        "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL;",
+        sql, data,
         (err, result) => {
           if(err){
             console.log(err);
@@ -283,6 +285,8 @@ app.get('/historyVerify', (req, res) => {
           }
         }
       );
+      }else {
+        res.send("At least one of the variables was missing");
       }
 })
 app.put('/verifyLine', (req, res) => {
