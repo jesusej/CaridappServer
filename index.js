@@ -266,6 +266,23 @@ app.post('/setDonator', (req, res) => {
     ); 
 })
 
+app.get('/historyVerify', (req, res) => {
+
+  db.query(
+      "SELECT line.lineID, product.itemName, donation.pickUpDate, line.upc, line.donationID, line.unitaryCost, line.productExpiration, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL;",
+      (err, result) => {
+        if(err){
+          console.log(err);
+        }
+        else if(result.length > 0) {
+          res.send(result);
+        }
+        else{
+          res.send("There's no registered products in db");
+        }
+      }
+    );
+})
 app.put('/verifyLine', (req, res) => {
   
   let Line_ID = req.body.lineID;
@@ -312,7 +329,7 @@ app.get('/historyDonation', (req, res) => {
           res.send(result);
         }
         else{
-          res.send("There's no registered products in db");
+          res.send("There's no registered products in db"); 
         }
       }
     );
