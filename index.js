@@ -30,49 +30,7 @@ app.get('/', (req, res) => {
   res.status(200).send("Hello world!");
 });
 
-app.get('/users', (req, res) => {
-  console.log("Sending all the users to " + req.ip);
-  db.query(
-    "SELECT * FROM user",
-    (err, result) => {
-      if(err){
-        console.log(err);
-      }
-      else if(result.length > 0) {
-        res.send(result);
-      }
-      else{
-        res.send("There's no users in db");
-      }
-    }
-  );
-});
-
-app.post('/user', (req, res) => {
-
-  console.log("Register user request from " + req.ip);
-
-  let username = req.body.username;
-  let password = req.body.password;
-  let role = req.body.role;
-
-  if (username && password && (role || role === 0)){
-    db.query(
-      "INSERT INTO user (name, hashedPwd, role) VALUES (?, ?, ?)", [username, password, role],
-      (err, result) => {
-        if(err){
-          console.log(err);
-          res.send(err);
-        }
-        else {
-          res.send("User " + username + " registered successfully");
-        }
-      }
-    );
-  } else {
-    res.send("At least one of the variables was missing");
-  }
-})
+/* Routes for Publish Donation */
 
 app.post('/setDonation', (req, res) => {
   var lineArray = [];
