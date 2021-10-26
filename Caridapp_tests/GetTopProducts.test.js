@@ -5,7 +5,7 @@ let baseUrl = "https://caridapp.herokuapp.com/getTopProducts";
 describe('Get Top Products', () => {
   it('Gets the top 5 products used on donations', (done) => {
     request.get({ url: baseUrl }, 
-      function(body) {
+      (error, response, body) => {
         console.log(body);
         let bodyObj = JSON.parse(body);
         let product = bodyObj[0];
