@@ -227,7 +227,7 @@ app.post('/setDonator', (req, res) => {
 app.get('/historyVerify/:donationID', (req, res) => {
   let dona_ID = req.params.donationID
   let data = [dona_ID]
-  let sql = "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.quantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL AND donation.donationID = ?;"
+  let sql = "SELECT line.lineID, donation.donationID, product.itemName, donation.pickUpDate, line.upc, line.unitaryCost, line.productExpiration, line.quantity, line.originalQuantity FROM line JOIN product ON line.upc=product.upc JOIN donation ON donation.donationID  WHERE pickUpDate IS NOT NULL AND donation.donationID = ?;"
   if (dona_ID){
     db.query(
         sql, data,
