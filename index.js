@@ -253,9 +253,9 @@ app.put('/verifyLine', (req, res) => {
   let dona_ID = req.body.donationID;
   let quant_rec = req.body.quantity;
   let prodExp = req.body.productExpiration;
-
+  
   //let sql = 'UPDATE line SET unitaryCost=?, originalQuantity=? WHERE lineID=?';
-  let sql = 'SET SQL_SAFE_UPDATES=0; UPDATE line, donation SET line.quantity = ?, line.productExpiration = ? WHERE line.lineID = ? AND line.donationID = ?; SET SQL_SAFE_UPDATES=1;';
+  let sql = 'UPDATE line, donation SET line.quantity = ?, line.productExpiration = ? WHERE line.lineID = ? AND line.donationID = ?';
   let data = [quant_rec, prodExp, Line_ID, dona_ID];
 
   if (Line_ID && dona_ID){
